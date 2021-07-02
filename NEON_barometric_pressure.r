@@ -9,6 +9,11 @@ options(stringsAsFactors=F)
 ##### Code below exports 12 folders, one for each month
 #### Export and append to one file for the entire year
 
+##### questions:
+### save path? directly to GitHub or somewhere else?
+### simply import the 30 minute files, cbind/rbind to one table for each year, then export as one file?
+### what does the tabl argument do/how can we use it to bring in just the 30 min csv files?
+
 
 ### 2018
 zipsByProduct(dpID="DP1.00004.001", package="basic", 
