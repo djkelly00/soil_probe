@@ -1,9 +1,18 @@
+# load packages
 install.packages("neonUtilities")
+install.packages("raster")
 #install.packages("BiocManager")
 #BiocManager::install('rhdf5')
 library(neonUtilities)
 
+# Set global option to NOT convert all character variables to factors 
 options(stringsAsFactors=F)
+
+# Modify the file path to match the path to your zip file
+# creates one table for all data for 30 min 
+stackByTable("~/Downloads/NEON_par.zip")
+
+# Does the data in Drop Box come from an excel spreadsheet? Data should be updated everytime the code is run for the same dataset
 
 ##### We want a file for each year of barometric pressure - every 30 minutes
 ##### Code below exports 12 folders, one for each month
