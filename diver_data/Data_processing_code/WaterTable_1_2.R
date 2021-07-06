@@ -168,10 +168,10 @@ ggsave(file.path("Pressure observed by Divers.jpeg"), plot = g0, height = 7, wid
 # tail(neon::neon_met_minute)
 
 
-date.range <- range(dat2$date.time, na.rm = TRUE)
+date.range <- strftime(as.POSIXlt(range(dat2$date.time, na.rm = TRUE)), format = "%Y-%m")
 
 bp.df <- loadByProduct('DP1.00004.001', site = "SERC",
-  startdate = date.range[1], enddate = date.range[2])
+  startdate = date.range[1], enddate = date.range[2], timeIndex = 30)
 
 
 met.P.neon <- subset(neon::neon_met_minute, date.time > range(dat2$date.time, na.rm = TRUE)[1] &
