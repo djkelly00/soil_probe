@@ -37,5 +37,5 @@ jobs:
         shell: Rscript {0}
       - name: Generate data
         run: |
-          source("R/Import_diver_data.R")
+          source("R/Water_table_1_2.R")
         shell: Rscript {0} 
