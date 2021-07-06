@@ -28,7 +28,6 @@ ele$ele.probe <- factor(ele$ele.probe, levels =
                           c("0.98 m (3a)", "1.7 m (6b)", "5.19 m (5f)", "8 m (4c)",
                             "8.32 m (2d)", "9.55 m (1e)", "8.14 m (NAbaro)"))
 
-bp.df <- loadByProduct(DP1.00004.001, site = "SERC")
 
 # ## manual water depth measurement
 
@@ -167,6 +166,14 @@ ggsave(file.path("Pressure observed by Divers.jpeg"), plot = g0, height = 7, wid
 # ## this is not perfect because there tmon is recorded every six minutes
 # tmon.P$Bp_mod <- tmon.P$Bp*10.1972 # from KPa to cm H20
 # tail(neon::neon_met_minute)
+
+
+date.range <- range(dat2$date.time, na.rm = TRUE)
+
+bp.df <- loadByProduct('DP1.00004.001', site = "SERC",
+  startdate = date.range[1], enddate = date.range[2])
+
+
 met.P.neon <- subset(neon::neon_met_minute, date.time > range(dat2$date.time, na.rm = TRUE)[1] &
                        date.time < range(dat2$date.time, na.rm = TRUE)[2])
 # load("data-raw/neon_met_minute.rda")
