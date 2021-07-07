@@ -9,8 +9,12 @@ library(neonUtilities)
 options(stringsAsFactors=F)
 
 # Modify the file path to match the path to your zip file
-# creates one table for all data for 30 min 
-stackByTable("~/Downloads/NEON_par.zip")
+# Run this code to create a new unziped file. Go to stack files and then open stackedFiles to BP_30mins 
+# BP_30mins is a data table for 2020-05 to 2021-06 for 30 mins
+stackByTable("~/Downloads/NEON_pressure-air.zip")
+
+# Should we separate the data outside of R or on R?
+# BP_30min available as a file in soil_probe 
 
 # Does the data in Drop Box come from an excel spreadsheet? Data should be updated everytime the code is run for the same dataset
 
