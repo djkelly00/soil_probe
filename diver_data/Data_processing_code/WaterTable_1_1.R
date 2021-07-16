@@ -160,7 +160,7 @@ ggsave(file.path("figures/Pressure observed by Divers.jpeg"), plot = g0, height 
 #
 # tmon.P$date.time <- floor_date(tmon.P$date.time, unit = "5 mins")
 # ## this is not perfect because there tmon is recorded every six minutes
-# tmon.P$Bp_mod <- tmon.P$Bp*10.1972 # from KPa to cm H20
+# tmon.P$Bp_mod <- tmon.P$Bp*10.1972 # from KPa to cm H20 - consider this for new  code
 # tail(neon::neon_met_minute)
 met.P.neon <- subset(neon::neon_met_minute, date.time > range(dat2$date.time, na.rm = TRUE)[1] &
                        date.time < range(dat2$date.time, na.rm = TRUE)[2])
@@ -229,8 +229,8 @@ ggplot(atm, aes(x = date.time)) +
 ggsave(file.path("figures/Atmospheric Pressure Baro vs. MetTower.jpeg"), height = 7, width = 15, units='in')
 
 # Compensating based on Atm Pressure data from Met Tower
-# Water head_cmH2O = Obs_Well_Diver_Pressure_cmH2O - Obs_Atm_pressure_cmH2O
-# Depth of water table_cm = Obs_Cable_length_cm Pipe height above surface
+# Water head_cmH2O = Obs_Well_Diver_Pressure_cmH2O - Obs_Atm_pressure_cmH2O 
+# Depth of water table_cm = Obs_Cable_length_cm ((-)) Pipe height above surface
 #  - Water head_cmH2O (This can be verified against actual measurement; cable length includes pipe height above ground)
 # OR
 # Ground_water_level_m = Obs_Well_Elevation_m - Depth of water table_cm/100

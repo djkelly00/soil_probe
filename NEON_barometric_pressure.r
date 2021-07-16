@@ -14,8 +14,9 @@ options(stringsAsFactors=F)
 stackByTable("~/Downloads/NEON_pressure-air.zip")
 
 # Calculate KPa to cm H2O
-# BP_30min$BP_mod <- which variable would I multiply by? 
-# tmon.P$Bp_mod <- tmon.P$Bp*10.1972
+BP_30min$BP_mod <- BP_30min$corPres * 10.1972 
+View(BP_30min)
+
 
 # Does the data in Drop Box come from an excel spreadsheet? Data should be updated everytime the code is run for the same dataset
 
