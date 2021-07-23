@@ -8,6 +8,7 @@
 > *Only one person needs to complete the following steps*
 > 
  - Create a shared folder in Dropbox
+ - Open GitBash and navigate to the Dropbox folder you wish to clone the repository into using the following (edited for your folder location)
  
     cd "C:/Users/researcher/Dropbox/name_of_folder"
 
@@ -27,7 +28,9 @@
 
     cd "C:/Users/researcher/Dropbox/name_of_folder/name_of_cloned_repository"
 
+##2. Use the command 'git pull' to update the Dropbox folder
 
+    git pull
 
 
 
