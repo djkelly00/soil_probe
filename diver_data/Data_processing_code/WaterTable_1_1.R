@@ -230,7 +230,7 @@ ggsave(file.path("figures/Atmospheric Pressure Baro vs. MetTower.jpeg"), height 
 
 # Compensating based on Atm Pressure data from Met Tower
 # Water head_cmH2O = Obs_Well_Diver_Pressure_cmH2O - Obs_Atm_pressure_cmH2O 
-# Depth of water table_cm = Obs_Cable_length_cm ((-)) Pipe height above surface
+# Depth of water table_cm = Obs_Cable_length_cm - Pipe height above surface
 #  - Water head_cmH2O (This can be verified against actual measurement; cable length includes pipe height above ground)
 # OR
 # Ground_water_level_m = Obs_Well_Elevation_m - Depth of water table_cm/100
