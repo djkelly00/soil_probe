@@ -13,8 +13,11 @@ options(stringsAsFactors=F)
 # BP_30mins is a data table for 2020-05 to 2021-06 for 30 mins
 stackByTable("~/Downloads/NEON_pressure-air.zip")
 
-# Should we separate the data outside of R or on R?
-# BP_30min available as a file in soil_probe 
+# Calculate KPa to cm H2O
+BP_30min$BP_mod <- BP_30min$corPres * 10.1972 
+View(BP_30min)
+
+#Local 
 
 # Does the data in Drop Box come from an excel spreadsheet? Data should be updated everytime the code is run for the same dataset
 
