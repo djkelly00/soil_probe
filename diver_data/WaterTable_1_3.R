@@ -4,6 +4,14 @@
 ## Title: To compile and plot SERC ForestGEO plot Diver/ water table level data
 ##-------------------
 
+library(pacman)
+library(tidyverse)
+library(neonUtilities)
+library(scales)
+library(cowplot)
+library(zoo)
+library(readxl)
+
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 pacman::p_load(tidyverse, mettower, neon, tmon,
@@ -139,7 +147,7 @@ for (i in 1:length(diver_files)) {
   setTxtProgressBar(pb2, i)
   ## add headers
 }
-colnames(dat2) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well")
+colnames(dat2) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well", "A.Cable_Length_cm_2020")
 dat2$date.time <- strptime(dat2$date.time, "%Y/%m/%d %H:%M:%S")
 str(dat2)
 dat2$date.time <- as.POSIXct(lubridate::force_tz(as.POSIXct(dat2$date.time), tz = "America/New_York"))
@@ -147,7 +155,7 @@ dat2 <- dat2 %>% arrange(date.time)
 head(dat2); tail(dat2)
 dat2 <- dat2 %>% mutate(date.time.well = paste(date.time, well, sep = "_")) %>%
   subset(!duplicated(date.time.well)) %>% arrange(date.time)
-dat2 <- left_join(dat2, select(ele, elevation_meters, well,
+dat2 <- left_join(dat2, select(ele, elevation_meters, well, A.Cable_Length_cm_2020,
                                ele.probe, `Pipe Height From Ground_cm`), by = "well")
 
 g0 <- ggplot(dat2, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.probe)) +
