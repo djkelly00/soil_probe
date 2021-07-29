@@ -43,82 +43,6 @@ ele$ele.probe <- factor(ele$ele.probe, levels =
                             "8.32 m (2d)", "9.55 m (1e)", "8.14 m (NAbaro)"))
 
 
-# ## manual water depth measurement
-
-# manual <- read.csv(
-#   file.path("water_depth_manual_measurements_Kay_0920.csv"),
-#   na.strings = c("NA", ""),
-#   header = T,
-#   row.names = NULL,
-#   check.names = F
-# )
-# manual$date <- lubridate::force_tz(lubridate::mdy(manual$date), tz = "America/New_York")
-# manual$date.time <- lubridate::force_tz(as.POSIXct(paste(manual$date, manual$time.matching,
-#                                               sep = " ", format = "%Y-%m-%d %H:%M:%S %p")), tz = "America/New_York")
-# attr(manual$date.time, "tzone")
-# manual$date.time_ceiling <- lubridate::ceiling_date(manual$date.time, unit = "5 mins")
-# manual$well.date.time <- paste(manual$well, manual$date.time_ceiling, sep = ".")
-# manual$water_depth_manual_cm <- as.numeric(manual$water_depth_manual_cm)
-# manual$water_depth_manual_cm[2] <- NA
-# ## adding diver data exported from diver.office. files have 51 lines of text, then header which does not get read, so 52 lines removed
-# path1 = "data-raw/Diver-Office_exported data/CSV/compensated"
-# path2 = "data-raw/Diver-Office_exported data/CSV/uncompensated"
-# diver_files <- list.files(
-#   path =
-#     path1,
-#   pattern = ".CSV",
-#   recursive = FALSE,
-#   full.names = TRUE
-# )
-# ## archiving locally
-# file.copy(diver_files, "data-raw/Diver-Office_exported data copy/CSV/compensated", overwrite = TRUE)
-
-# diver_files <- list.files(
-#   path =
-#     path2,
-#   pattern = ".CSV",
-#   recursive = FALSE,
-#   full.names = TRUE
-# )
-# ### need to remove file serc_fgeo_6b_aj638_190221085436_AJ638.CSV as it has data which erroneously repeats data from teh beginning of file beginning 1/27/2019
-
-# diver_files <- list.files(".", pattern = "serc_fgeo", ignore.case = TRUE)
-
-# total1 = length(diver_files)
-# # create progress bar
-# pb1 <- txtProgressBar(min = 0, max = total1, style = 3)
-# for (i in 1:length(diver_files)) {
-#   new.file <- read.csv(
-#     diver_files[i],
-#     skip = 51, ## remove details
-#     na.strings = c("NA", ""),
-#     header = T,
-#     row.names = NULL,
-#     check.names = F
-#   )
-#   # remove last row
-#   new.file <- new.file[-nrow(new.file), ]
-#   # add well ID
-#   new.file$well <- ele$well[str_detect(tolower(diver_files[i]), wells)]
-#   if (i == 1) {
-#     dat1 <- new.file
-#   } else {
-#     dat1 <- rbind.data.frame(dat1, new.file)
-#   }
-#   Sys.sleep(0.1)
-#   # update progress bar
-#   setTxtProgressBar(pb1, i)
-#   ## add headers
-# }
-# colnames(dat1) <- c("date.time", "GWL_cm", "Temp_C", "well")
-# head(dat1); tail(dat1)
-
-# dat1$date.time <- strptime(dat1$date.time, "%Y/%m/%d %H:%M:%S")
-# str(dat1)
-# dat1$date.time <- lubridate::force_tz(as.POSIXct(dat1$date.time), tz = "America/New_York")
-# dat1 <- left_join(dat1, select(ele, elevation_meters, well, ele.probe), by = "well")
-# dat1$temp.depth <- dat1$elevation_meters*100 - dat1$GWL_cm/100 # converting meters to cm
-
 ### uncompensated files
 diver_files <- list.files(".", pattern = "serc_fgeo", ignore.case = TRUE)
 total2 = length(diver_files)
@@ -147,7 +71,7 @@ for (i in 1:length(diver_files)) {
   setTxtProgressBar(pb2, i)
   ## add headers
 }
-colnames(dat2) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well", "A.Cable_Length_cm_2020")
+colnames(dat2) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well")
 dat2$date.time <- strptime(dat2$date.time, "%Y/%m/%d %H:%M:%S")
 str(dat2)
 dat2$date.time <- as.POSIXct(lubridate::force_tz(as.POSIXct(dat2$date.time), tz = "America/New_York"))
@@ -155,10 +79,10 @@ dat2 <- dat2 %>% arrange(date.time)
 head(dat2); tail(dat2)
 dat2 <- dat2 %>% mutate(date.time.well = paste(date.time, well, sep = "_")) %>%
   subset(!duplicated(date.time.well)) %>% arrange(date.time)
-dat2 <- left_join(dat2, select(ele, elevation_meters, well, A.Cable_Length_cm_2020,
-                               ele.probe, `Pipe Height From Ground_cm`), by = "well")
+diver_neon_dat <- left_join(dat2, select(ele, elevation_meters, well,
+                               ele.probe, `Pipe Height From Ground_cm`, A.Cable_Length_cm_2020), by = "well")
 
-g0 <- ggplot(dat2, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.probe)) +
+g0 <- ggplot(diver_neon_dat, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.probe)) +
   geom_point(show.legend = F, size = 0.5) +
   facet_grid(ele.probe ~., scales = "free_y") +
   ylab("Pressure (cmH2O)") + xlab("Date") +
@@ -170,17 +94,18 @@ ggsave(file.path("Pressure observed by Divers.jpeg"), plot = g0, height = 7, wid
 
 
 library(neonUtilities)
-date.range <- strftime(as.POSIXlt(range(dat2$date.time, na.rm = TRUE)), format = "%Y-%m")
+date.range <- strftime(as.POSIXlt(range(diver_neon_dat$date.time, na.rm = TRUE)), format = "%Y-%m")
 bp.ls <- loadByProduct('DP1.00004.001', site = "SERC",
   startdate = date.range[1], enddate = date.range[2], timeIndex = 30)
 y
 bp.neon <- bp.ls$BP_30min
 bp.neon$Bp_mod <- bp.neon$staPresMean * 10.1972 # from KPa to cm H20
-interval.index <- findInterval(as.numeric(dat2$date.time), as.numeric(bp.neon$startDateTime))
+interval.index <- findInterval(as.numeric(diver_neon_dat$date.time), as.numeric(bp.neon$startDateTime))
 
-dat2$Bp_mod <- bp.neon$Bp_mod[interval.index]
+diver_neon_dat$Bp_mod <- bp.neon$Bp_mod[interval.index]
 date <- strptime(Sys.time(), "%Y-%m-%d")
-save(dat2, file = sprintf("Diver_data_%s.Rdata", date))
+diver_neon_dat <- diver_neon_dat
+save(diver_neon_dat, file = sprintf("Diver_data_%s.Rdata", date))
 
 
 # need to cut out dates that have no calibration.
@@ -190,28 +115,6 @@ save(dat2, file = sprintf("Diver_data_%s.Rdata", date))
 # dat1 <- left_join(dat1, select(ele, elevation_meters, well, ele.probe), by = "well")
 # dat1$temp.depth <- dat1$elevation_meters*100 - dat1$GWL_cm/100 # converting meters to cm
 
-
-
-
-str(bp.neon)
-
-head(dat2)
-
-
-
-
-
-yy <- as.numeric(bp.neon$startDateTime)
-xx <- dat2$date.time[1:10]
-zz <- findInterval(xx, yy)
-
-
-yy[zz]
-
-neon.intervals <- interval(ymd_hms(bp.neon$startDateTime), ymd_hms(bp.neon$endDateTime))
-align.index <- xx %within% neon.intervals
-findInterval(as.numeric(xx[1]), yy)
-bp.neon[align.index, ]
 
 
 # met.P.neon <- subset(neon::neon_met_minute, date.time > range(dat2$date.time, na.rm = TRUE)[1] &
@@ -280,20 +183,9 @@ bp.neon[align.index, ]
 #   ggtitle("Atmospheric Pressure: Baro Diver at ForestGEO plot Vs. Met Tower")
 # ggsave(file.path("figures/Atmospheric Pressure Baro vs. MetTower.jpeg"), height = 7, width = 15, units='in')
 
-# # Compensating based on Atm Pressure data from Met Tower
-# # Water head_cmH2O = Obs_Well_Diver_Pressure_cmH2O - Obs_Atm_pressure_cmH2O
-# # Depth of water table_cm = Obs_Cable_length_cm Pipe height above surface
-# #  - Water head_cmH2O (This can be verified against actual measurement; cable length includes pipe height above ground)
-# # OR
-# # Ground_water_level_m = Obs_Well_Elevation_m - Depth of water table_cm/100
 
-# # dat3 <- left_join(dat2, subset(met.P, select = c(date.time, Bp_mod)), by = "date.time")
-# dat3 <- left_join(dat2, subset(atm.P, select = c(date.time, AtmPressure_cmH2O)), by = "date.time")
-# dat3$water_head_cm <- dat3$WaterPressure_cmH2O - dat3$AtmPressure_cmH2O
-# dat3 <- dat3 %>% mutate(water_head_cm = ifelse(water_head_cm > 600 |
-#                                                  water_head_cm < 0, NA, water_head_cm))
 # ## erroneous data for 1e and 5f
-# g0 <- ggplot(dat3, aes(x = date.time, y = water_head_cm, colour = ele.probe)) +
+# g0 <- ggplot(diver_neon_dat, aes(x = date.time, y = water_head_cm, colour = ele.probe)) +
 #   geom_point(show.legend = F, size = 0.5) +
 #   facet_grid(ele.probe ~., scales = "free_y") +
 #   ylab("Water Head (cmH2O)") + xlab("Date") +
@@ -302,33 +194,46 @@ bp.neon[align.index, ]
 #   ggtitle("Water Head above Divers at SERC ForestGEO plot")
 # ggsave(file.path("figures/Water Head above Divers.jpeg"), plot = g0, height = 7, width = 12, units='in')
 
-# dat3.1 <- left_join(dat3 %>% subset(date.time < lubridate::force_tz(as.POSIXct("2019-02-14 00:00"), tz = "America/New_York")),
+# diver_neon_dat.1 <- left_join(diver_neon_dat %>% subset(date.time < lubridate::force_tz(as.POSIXct("2019-02-14 00:00"), tz = "America/New_York")),
 #                                     select(ele, well, A.Cable_Length_cm_2018), by = "well")
-# dat3.2 <- left_join(dat3 %>% subset(date.time >= lubridate::force_tz(as.POSIXct("2019-02-14 00:00"), tz = "America/New_York")),
+# diver_neon_dat.2 <- left_join(diver_neon_dat %>% subset(date.time >= lubridate::force_tz(as.POSIXct("2019-02-14 00:00"), tz = "America/New_York")),
 #                                    select(ele, well, A.Cable_Length_cm_2020), by = "well")
 
+############################### START HERE WITH DIVER_NEON_DAT INSTEAD OF diver_neon_dat ##########################################
 # ## the depth of the probe bottom from soil surface == string length (which is attached to the top of the pipe sticking out above the surface to the top of the 110 mm long probe)
-# dat3.1$probe.depth <- dat3.1$A.Cable_Length_cm_2018 -
-#   dat3.1$`Pipe Height From Ground_cm` + 11 # the length of the probe itself in cm
-# dat3.2$probe.depth <- dat3.2$A.Cable_Length_cm_2020  -
-#   dat3.2$`Pipe Height From Ground_cm` + 11
-# ## the depth of the water table from the surface
-# dat3.3 <- bind_rows(dat3.1 %>% select(-A.Cable_Length_cm_2018),
-#                   dat3.2 %>% select(-A.Cable_Length_cm_2020))
-# dat3.3 <- dat3.3 %>% mutate(depth = probe.depth - water_head_cm,
-#                             date = as.Date(date.time),
-#                             well.dates = paste(well, date, sep = ".")) %>%
-#   subset(well != "baro" & depth > 0)
 
-# # p0 <- ggplot(dat3.3, aes(x = date.time, y = depth, colour = ele.probe)) +
-# #   geom_point(size = 0.1) +
-# #   scale_y_reverse() +
-# #   ylab("Water Depth (cm)") + xlab("Date") +
-# #   scale_color_discrete("Elevation_m (probe)") +
-# #   ggtitle("Water depth from soil surface in SERC ForestGEO plot")
-# # p0 + scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
-# #   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90)) + #vjust = -0.1 +
-# #   theme(legend.position = c(0.6, 0.5))
+# # Compensating based on Atm Pressure data from Met Tower
+# # Water head_cmH2O = Obs_Well_Diver_Pressure_cmH2O - Obs_Atm_pressure_cmH2O
+# # Depth of water table_cm = Obs_Cable_length_cm - Pipe height above surface
+# #  - Water head_cmH2O (This can be verified against actual measurement; cable length includes pipe height above ground)
+# # OR
+# # Ground_water_level_m = Obs_Well_Elevation_m - Depth of water table_cm/100
+
+# diver_neon_dat <- left_join(dat2, subset(met.P, select = c(date.time, Bp_mod)), by = "date.time")
+# diver_neon_dat <- left_join(dat2, subset(atm.P, select = c(date.time, )), by = "date.time")
+diver_neon_dat$water_head_cm <- diver_neon_dat$WaterPressure_cmH2O - diver_neon_dat$Bp_mod
+diver_neon_dat <- diver_neon_dat %>% mutate(water_head_cm = ifelse(water_head_cm > 600 |
+                                                 water_head_cm < 0, NA, water_head_cm))
+
+diver_neon_dat$probe.depth <- diver_neon_dat$A.Cable_Length_cm_2020 - 
+  diver_neon_dat$`Pipe Height From Ground_cm` + 11 # the length of the probe itself in cm
+
+## the depth of the water table from the surface
+diver_neon_dat.3 <- diver_neon_dat
+diver_neon_dat.3 <- diver_neon_dat.3 %>% mutate(depth = probe.depth - water_head_cm,
+                            date = as.Date(date.time),
+                            well.dates = paste(well, date, sep = ".")) %>%
+  subset(well != "baro" & depth > 0)
+
+p0 <- ggplot(diver_neon_dat.3, aes(x = date.time, y = depth, colour = ele.probe)) +
+  geom_point(size = 0.1) +
+  scale_y_reverse() +
+  ylab("Water Depth (cm)") + xlab("Date") +
+  scale_color_discrete("Elevation_m (probe)") +
+  ggtitle("Water depth from soil surface in SERC ForestGEO plot")
+p0 + scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
+  theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90)) + #vjust = -0.1 +
+  theme(legend.position = c(0.6, 0.5))
 
 # ## this needs some depth corrections
 
@@ -348,16 +253,16 @@ bp.neon[align.index, ]
 #          date.time = lubridate::force_tz(ymd_hm(paste(date, download_time, sep = " ")), tz = "America/New_York"),
 #          date.time_floor = floor_date(date.time, unit = "5 mins"),
 #          well.date.time_floor = paste(well, date.time_floor, sep = "."))
-# dat3.3$well.date.time <- paste(dat3.3$well, dat3.3$date.time, sep = ".")
+# diver_neon_dat.3$well.date.time <- paste(diver_neon_dat.3$well, diver_neon_dat.3$date.time, sep = ".")
 # # removing an hour long record after the diver was downloaded
-# ## corresponding date.time in dat3
-# corresponding.dt <- dat3.3$date.time[dat3.3$well.date.time %in% dates$well.date.time_floor]
-# row.at.download <- sort(which(dat3.3$well.date.time %in% dates$well.date.time_floor), decreasing = FALSE)
+# ## corresponding date.time in diver_neon_dat
+# corresponding.dt <- diver_neon_dat.3$date.time[diver_neon_dat.3$well.date.time %in% dates$well.date.time_floor]
+# row.at.download <- sort(which(diver_neon_dat.3$well.date.time %in% dates$well.date.time_floor), decreasing = FALSE)
 # ## remove 4 rows more covering 20 min after download:
 # rows.to.remove <- sort(unlist(lapply(row.at.download, function(x) { c(x: c(x+4))})))
-# # but some rows.to.remove index beyond dat3 rows, so excluding those
-# row.to.remove.mod <- rows.to.remove[rows.to.remove < nrow(dat3)]
-# data <- dat3.3 %>% mutate(depth = replace(depth, row.to.remove.mod, NA))
+# # but some rows.to.remove index beyond diver_neon_dat rows, so excluding those
+# row.to.remove.mod <- rows.to.remove[rows.to.remove < nrow(diver_neon_dat)]
+# data <- diver_neon_dat.3 %>% mutate(depth = replace(depth, row.to.remove.mod, NA))
 # ## then there are instances when time is not recorded, so removing whole day of record
 # data <- data %>% mutate(depth = replace(depth, which(data$well.dates %in% dates$well.dates[is.na(dates$date.time)]), NA))
 # # Met a hard layer of Marlboro clay at 4c, first couple of days data looks weird, so removing
