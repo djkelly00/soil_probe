@@ -1,5 +1,5 @@
 ##-------------------
-## Author: Rutuja Chitra-Tarak, Sean McMahon, Jess Shue
+## Author: Rutuja Chitra-Tarak, Sean McMahon, Jess Shue, and Dominique Kelly
 ## Date: 6/14/2021
 ## Title: To compile and plot SERC ForestGEO plot Diver/ water table level data
 ##-------------------
@@ -11,6 +11,7 @@ library(scales)
 library(cowplot)
 library(zoo)
 library(readxl)
+library(neonUtilities)
 
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman"); library(pacman)
@@ -62,44 +63,36 @@ for (i in 1:length(diver_files)) {
   # add well ID
   new.file$well <- ele$well[str_detect(tolower(diver_files[i]), wells)]
   if (i == 1) {
-    dat2 <- new.file
+    dat1 <- new.file
   } else {
-    dat2 <- rbind.data.frame(dat2, new.file)
+    dat1 <- rbind.data.frame(dat1, new.file)
   }
   Sys.sleep(0.1)
   # update progress bar
   setTxtProgressBar(pb2, i)
   ## add headers
 }
-colnames(dat2) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well")
+colnames(dat1) <- c("date.time", "WaterPressure_cmH2O", "Temp_C", "well")
+dat2 <- dat1
+head(dat2)
 dat2$date.time <- strptime(dat2$date.time, "%Y/%m/%d %H:%M:%S")
-str(dat2)
-dat2$date.time <- as.POSIXct(lubridate::force_tz(as.POSIXct(dat2$date.time), tz = "America/New_York"))
+
+# dat2 <- subset(dat1, !is.na(dat1$date.time))
 dat2 <- dat2 %>% arrange(date.time)
-head(dat2); tail(dat2)
 dat2 <- dat2 %>% mutate(date.time.well = paste(date.time, well, sep = "_")) %>%
   subset(!duplicated(date.time.well)) %>% arrange(date.time)
 diver_neon_dat <- left_join(dat2, select(ele, elevation_meters, well,
                                ele.probe, `Pipe Height From Ground_cm`, A.Cable_Length_cm_2020), by = "well")
 
-g0 <- ggplot(diver_neon_dat, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.probe)) +
-  geom_point(show.legend = F, size = 0.5) +
-  facet_grid(ele.probe ~., scales = "free_y") +
-  ylab("Pressure (cmH2O)") + xlab("Date") +
-  scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
-  theme(axis.text.x = element_text(size = 10, face = "plain", angle = 90)) +
-  ggtitle("Pressure observed by Divers at SERC ForestGEO plot")
-ggsave(file.path("Pressure observed by Divers.jpeg"), plot = g0, height = 7, width = 12, units='in')
-
-
-
-library(neonUtilities)
 date.range <- strftime(as.POSIXlt(range(diver_neon_dat$date.time, na.rm = TRUE)), format = "%Y-%m")
 bp.ls <- loadByProduct('DP1.00004.001', site = "SERC",
   startdate = date.range[1], enddate = date.range[2], timeIndex = 30)
 y
 bp.neon <- bp.ls$BP_30min
 bp.neon$Bp_mod <- bp.neon$staPresMean * 10.1972 # from KPa to cm H20
+bp.neon$startDateTime <- lubridate::force_tz(as.POSIXct(bp.neon$startDateTime), tz = "America/New_York")
+bp.neon$endDateTime <- lubridate::force_tz(as.POSIXct(bp.neon$endDateTime), tz = "America/New_York")
+
 interval.index <- findInterval(as.numeric(diver_neon_dat$date.time), as.numeric(bp.neon$startDateTime))
 
 diver_neon_dat$Bp_mod <- bp.neon$Bp_mod[interval.index]
