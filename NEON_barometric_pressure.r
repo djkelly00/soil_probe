@@ -13,6 +13,8 @@ options(stringsAsFactors=F)
 # BP_30mins is a data table for 2020-05 to 2021-06 for 30 mins
 stackByTable("~/Downloads/NEON_pressure-air.zip")
 
+#Should I add this?
+
 # Calculate KPa to cm H2O
 BP_30min$BP_mod <- BP_30min$corPres * 10.1972 
 View(BP_30min)

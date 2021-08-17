@@ -1,0 +1,23 @@
+---
+title: "psuedo_code"
+author: "JS"
+date: "8/16/2021"
+output: html_document
+---
+Metadata for VanEssen TD Divers
+   Six wells were installed on SERC's 16 ha ForestGEO plot in the spring of 2018 by Rutuja Chitra-Tarak, Sean McMahon, Patricia Mezza, and Cara Scalpone. Three wells were placed along two transects across an elevation gradient (9.55 m to 0.98 m). TD Divers were hung from string in each well and set to collect measurements every 5 minutes beginning May 30th 2018. The Divers record the date and time of the reading, the pressure in cm H2O, and temperature in Celsius.
+   Manually downloaded files were saved to:  "~/Dropbox (Smithsonian)/watertable_package/watertable/data-raw/Diver-Office_exported data/CSV/uncompensated"
+   
+   In January 2019 the Divers were connected to the Sentek probe network with Roy Rich's guidance via SDI-12 boxes. The data were manually downloaded on February 4th, 2019. The sampling rate was increased to 15 minutes to improve battery life and the data first were collected by LoggerNet on February 14th 2019. The data format transmitted directly to LoggerNet changed to include the following columns:
+   1 - pressure in cm H2O from diver
+   2 - temperature in C from diver
+   3 - barometric pressure in cm H2O from SDI-12 box
+   4 - temperature in C from SDI-12 box
+   5 - compensated pressure in cm H2O (column 1 - column 3)
+  
+  Weekly files were collected by Roy's system and saved to "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir"   
+  
+  Data were successfully collected this way until October 23, 2019 when a wire running from well 2 to well 3 was damaged (rodent). 'NA' values began appearing in the data and data were not manually downloaded again until February 27th, 2020. The Diver in well 5 also malfunctioned and was sent back to the manufacturer and replaced on (need dates).
+  Data were manually downloaded roughly bi-weekly in 2020. The Divers were reconnected to the LoggerNet system around August 6, 2021 with the last manual download of data occurring on July 15, 2021. 202
+
+
