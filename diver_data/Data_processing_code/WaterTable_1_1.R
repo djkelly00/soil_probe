@@ -349,7 +349,7 @@ data$depth[data$well == "2d" & data$date.time %in% period2] <- NA
 data$well.date.time <- paste(data$well, data$date.time, sep = ".")
 data <- full_join(data, select(manual, well.date.time, water_depth_manual_cm), by = "well.date.time")
 ## converting depth to GWL
-## Elevation at 3a and 6b cant be perfect. Minimum values for water depths are negative(~ 10-20 m). Correcting elevation by thhose amounts
+## Elevation at 3a and 6b cant be perfect. Minimum values for water depths are negative(~ 10-20 m). Correcting elevation by those amounts
 data %>% subset(!is.na(ele.probe)) %>% group_by(ele.probe) %>% summarise(max_depth_cm = max(depth, na.rm = T))
 # ele.probe   max_depth_cm
 # <chr>              <dbl>
