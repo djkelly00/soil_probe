@@ -19,5 +19,12 @@ Metadata for VanEssen TD Divers
   
   Data were successfully collected this way until October 23, 2019 when a wire running from well 2 to well 3 was damaged (rodent). 'NA' values began appearing in the data and data were not manually downloaded again until February 27th, 2020. The Diver in well 5 also malfunctioned and was sent back to the manufacturer and replaced on (need dates).
   Data were manually downloaded roughly bi-weekly in 2020. The Divers were reconnected to the LoggerNet system around August 6, 2021 with the last manual download of data occurring on July 15, 2021. 202
+  
+Rutuja Chitra-Tarak, Sean McMahon, and Jess Shue created three R Script files to compile and plot SERC ForestGEO plot diver data. [What distinguishes between the three separate files?] The elevation, temperature (Celsius), water pressure (H20/cm), date, and time is defined in these files. The time was adjusted for time zone and daylight savings time. 
 
+In WaterTable_1_1, the Loggernet measured data every 15 minutes while the diver recorded every 5 minutes, so the code interpolated times to line-up time records. The difference between the observed well diver pressure and the observed atmospheric pressure was found to compensate for the atmospheric pressure from the Met Tower. This new value is known as the `water head_cmH2o` or the ground water level. The difference between the observed cable length and the pipe height surface defined the depth of the water table. Records of excess time after download and when time is not recorded was removed. Finally, elevation was corrected by negative water depth amounts. 
+
+Lines 293-346: what is happening here?
+
+Dominique Kelly added the barometeric pressure data for the SERC ForestGEO plot from NEON. The focus was on the barometeric pressure data collected every 30 minutes. Within this dataset, BP_mod was created to convert KPA (corPres), which was pressure corrected to sea level, to H20/cm (water pressure) collected at SERC.
 
