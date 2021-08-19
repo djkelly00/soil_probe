@@ -18,7 +18,7 @@ Metadata for VanEssen TD Divers
   Weekly files were collected by Roy's system and saved to "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir"   
   
   Data were successfully collected this way until October 23, 2019 when a wire running from well 2 to well 3 was damaged (rodent). 'NA' values began appearing in the data and data were not manually downloaded again until February 27th, 2020. The Diver in well 5 also malfunctioned and was sent back to the manufacturer and replaced on (need dates).
-  Data were manually downloaded roughly bi-weekly in 2020. The Divers were reconnected to the LoggerNet system around August 6, 2021 with the last manual download of data occurring on July 15, 2021. 202
+  Data were manually downloaded roughly bi-weekly in 2020. The Divers were reconnected to the LoggerNet system around August 6, 2021 with the last manual download of data occurring on July 15, 2021.
   
 Rutuja Chitra-Tarak, Sean McMahon, and Jess Shue created three R Script files to compile and plot SERC ForestGEO plot diver data. [What distinguishes between the three separate files?] The elevation, temperature (Celsius), water pressure (H20/cm), date, and time is defined in these files. The time was adjusted for time zone and daylight savings time. 
 
