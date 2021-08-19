@@ -18,8 +18,57 @@ Metadata for VanEssen TD Divers
   Weekly files were collected by Roy's system and saved to "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir"   
   
   Data were successfully collected this way until October 23, 2019 when a wire running from well 2 to well 3 was damaged (rodent). 'NA' values began appearing in the data and data were not manually downloaded again until February 27th, 2020. The Diver in well 5 also malfunctioned and was sent back to the manufacturer and replaced on (need dates).
+<<<<<<< HEAD
   Data were manually downloaded roughly bi-weekly in 2020. The Divers were reconnected to the LoggerNet system around August 6, 2021 with the last manual download of data occurring on July 15, 2021.
 
+
+To do:
+### Manually downloaded files dates and sampling rate:
+September 24, 2018 - December 31, 3018; measurement every 5 minutes
+February 21, 2019; measurement every 5 minutes
+March 9, 2020 - December 29, 2020; measurement every 5 minutes until files downloaded April 22nd - increased to a measurement every hour
+January 19, 2021 - July 15, 2021; measurement every hour
+
+- import data from "~/Dropbox (Smithsonian)/watertable_package/watertable/data-raw/Diver-Office_exported data/CSV/uncompensated"
+
+- individual files for each diver with name pattern:  "serc_fgeo*.csv"  *one well is named "SERC_FGEO"
+
+- skip header of 51 lines; column names begin on line 52 of .csv file
+
+- these files need a barometric pressure added for compensation - either from NEON or Met Tower (remember to convert to cm H2O)
+
+- adjust dates/sampling rate to match between NEON and Diver data
+
+### LoggerNet files dates and sampling rates:
+February 14th, 2019 - October 23rd, 2019; measurement every 15 minutes
+July 29, 2021 Diver 1 only; every 15 minutes
+August 6, 2021 all Divers connected; every 15 minutes
+
+- no need to import any files after October 23rd 2019 or during 2020, the Divers were not connected to LoggerNet and all values are NA or 0
+
+- import data from:  "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir"
+
+- all diver data in one, weekly file with name pattern:  "FGEO-1_DIVER_*.dat"
+
+- skip lines 1, 3, and 4; column names on line 2
+
+- barometric pressure from each SDI-12 box (one at each well/diver) is the third column of data for each diver. Columns named with pattern "DIV_1_Avg_(1)", "DIV_1_Avg(2)" through "DIV_1_Avg(5)" and correspond to the column descriptions listed above
+
+- use the Avg(1) and Avg(3) columns to compensate the cm H2O pressure
+
+
+
+
+########## Added by Dominique
+  
+Rutuja Chitra-Tarak, Sean McMahon, and Jess Shue created three R Script files to compile and plot SERC ForestGEO plot diver data. [What distinguishes between the three separate files?] The elevation, temperature (Celsius), water pressure (H20/cm), date, and time is defined in these files. The time was adjusted for time zone and daylight savings time. 
+
+In WaterTable_1_1, the Loggernet measured data every 15 minutes while the diver recorded every 5 minutes, so the code interpolated times to line-up time records. The difference between the observed well diver pressure and the observed atmospheric pressure was found to compensate for the atmospheric pressure from the Met Tower. This new value is known as the `water head_cmH2o` or the ground water level. The difference between the observed cable length and the pipe height surface defined the depth of the water table. Records of excess time after download and when time is not recorded was removed. Finally, elevation was corrected by negative water depth amounts. 
+
+Lines 293-346: what is happening here?
+
+Dominique Kelly added the barometeric pressure data for the SERC ForestGEO plot from NEON. The focus was on the barometeric pressure data collected every 30 minutes. Within this dataset, BP_mod was created to convert KPA (corPres), which was pressure corrected to sea level, to H20/cm (water pressure) collected at SERC.
+>>>>>>> 1055a90d559319e79847b1a80b409716ea5ba024
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -44,4 +93,4 @@ plot(pressure)
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
-
+=======
