@@ -1,9 +1,10 @@
 ##-------------------
 ## Author: Rutuja Chitra-Tarak, Sean McMahon, Jess Shue, and Dominique Kelly
-## Date: 6/14/2021
+## Date: 11/22/2021
 ## Title: To compile and plot SERC ForestGEO plot Diver/ water table level data
 ##-------------------
-dgadsfgfaserfg
+
+# load required libraries
 library(pacman)
 library(tidyverse)
 library(neonUtilities)
@@ -13,11 +14,13 @@ library(zoo)
 library(readxl)
 library(neonUtilities)
 
+# from Rutuja. Don't know if we need all of this ... some is redundant. 
 rm(list = ls())
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 pacman::p_load(tidyverse, mettower, neon, tmon,
                scales, cowplot, soilmoisture, zoo, readxl)
 
+# This is a way of setting some customized graphical parameters for ggplot
 theme_set(theme_bw())
 theme_update(panel.grid.major = element_blank(),
              panel.grid.minor = element_blank(),
@@ -44,7 +47,7 @@ ele$ele.probe <- factor(ele$ele.probe, levels =
                             "8.32 m (2d)", "9.55 m (1e)", "8.14 m (NAbaro)"))
 
 
-### uncompensated files
+### uncompensated files (not yet corrected for atmospheric conditions)
 diver_files <- list.files(".", pattern = "serc_fgeo", ignore.case = TRUE)
 total2 = length(diver_files)
 
@@ -313,99 +316,7 @@ p0 + scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
 # data$GWL_m_manual <- data$elevation_meters - data$water_depth_manual_cm/100 # from depth in cm to m
 # watertable <- data
 
-# p2 <- ggplot(watertable,
-#              aes(x = date.time, y = depth, colour = elevation_meters)) +
-#   geom_point(size = 0.1) +
-#   scale_y_reverse(limits = c(400, 0)) +
-#   ylab("Water Depth (cm)") + xlab("Date") +
-#   scale_color_continuous("Elevation at \nwell locations \n(masl)", breaks = sort(ele$elevation_meters)) +
-#   theme(panel.grid.minor = element_blank()) +
-#   guides(colour = guide_legend(override.aes = list(size = 4))) +
-#   theme(legend.position = c(0.7, 0.4), legend.background = element_rect(fill = "transparent")) +
-#   ggtitle("Water depth from soil surface at six locations at SERC ForestGEO plot") +
-#   scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
-#   theme(axis.text.x = element_text(size = 11, face = "plain", angle = 90))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_proposal.jpeg"),
-#        plot = p2, height = 5, width = 7.5, units ='in')
-# p2.1 <- p2 + geom_point(aes(y = water_depth_manual_cm),
-#                         size = 3, shape = 3, alpha = 0.7, color = "red", show.legend = F) +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90, margin = margin(b = 2)))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_proposal_OBS.jpeg"),
-#        plot = p2.1, height = 5, width = 7.5, units='in')
-
-# ## with observations overlaid
-# p2.1 <- p2 +  geom_point(aes(y = water_depth_manual_cm), size = 3, color = "red", alpha = 0.7, shape = "triangle")
-
-# p3 <- ggplot(subset(watertable, !is.na(ele.probe)),
-#              aes(x = date.time, y = depth, colour = ele.probe)) +
-#   geom_point(size = 0.1) +
-#   scale_y_reverse(limits = c(400, 0)) +
-#   ylab("Water Depth (cm)") + xlab("Date") +
-#   scale_color_discrete("Elevation_m (probe)") +
-#   theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-#   guides(colour = guide_legend(override.aes = list(size = 4))) +
-#   theme(legend.position = c(0.3, 0.6), legend.background = element_rect(fill="transparent")) +
-#   theme(axis.text = element_text(size = 12, face = "plain", angle = 0)) +
-#   ggtitle("Water depth from soil surface at six locations at SERC ForestGEO plot") +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90, margin = margin(b = 2)))
-# p3.1 <- p3 + scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y")
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel.jpeg"), plot = p3.1, height = 5, width = 7.5, units='in')
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel.pdf"), plot = p3.1, height = 5, width = 7.5, units='in')
-# # p3.2 <- p3 +  scale_x_datetime(limits = c(max(watertable$date.time, na.rm = T) - 2*30*24*60*60, max(watertable$date.time, na.rm = T)),
-# #                        date_breaks = "1 month", date_labels = "%d%b%y")
-# # ggsave(file.path("figures/Water depth from surface by wells_single_panel_last_two_months.pdf"), plot = p3.2, height = 5, width = 7.5, units='in')
-# # ggsave(file.path("figures/Water depth from surface by wells_single_panel_last_two_months.jpeg"), plot = p3.2, height = 5, width = 7.5, units='in')
-# ## overlaid with obs
-# p3.3 <- p3 + geom_point(aes(y = water_depth_manual_cm, fill = ele.probe),
-#                         size = 3, shape = 23, color = "black", alpha = 0.7, show.legend = F) +
-#   scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y")
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_with_OBS.jpeg"),  plot = p3.3, height = 5, width = 7.5, units='in')
-
-# p3.4 <- p3.3 + scale_x_datetime(limits = c(max(watertable$date.time, na.rm = T) - 1*30*24*60*60, max(watertable$date.time, na.rm = T)),
-#                                  date_breaks = "2 days", date_labels = "%d%b%y") +
-#   theme(legend.position = c(0.8, 0.6), legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_with_OBS_last month.jpeg"),  plot = p3.4, height = 5, width = 7.5, units='in')
-# p3.5 <- p3.3 +  scale_x_datetime(limits = c(as.POSIXct("2020-03-02"), as.POSIXct("2020-03-02") + 3*24*60*60),
-#                                  date_breaks = "1 day", date_labels = "%d%b%y") +
-#   theme(legend.position = c(0.8, 0.6), legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_with_OBS_measurements.jpeg"),  plot = p3.5, height = 5, width = 7.5, units='in')
-
-# p3.6 <- p3.3 +  scale_x_datetime(limits = c(as.POSIXct("2020-07-15"), as.POSIXct("2020-09-15")),
-#                                  date_breaks = "1 week", date_labels = "%d%b%y") +
-#   theme(legend.position = c(0.9, 0.3), legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_with_OBS_measurements_July-Aug-Sep2020.jpeg"),  plot = p3.6, height = 5, width = 7.5, units='in')
-# p3.7 <- p3.3 +  scale_x_datetime(limits = c(as.POSIXct("2020-05-01"), as.POSIXct("2020-07-15")),
-#                                  date_breaks = "1 week", date_labels = "%d%b%y") +
-#   theme(legend.position = c(0.2, 0.3), legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Water depth from surface by wells_single_panel_with_OBS_measurements_May-Jun-July2020.jpeg"),  plot = p3.7, height = 5, width = 7.5, units='in')
-
 # ###----
-# ## plotting watertable
-# p1 <- ggplot(subset(watertable, !is.na(ele.probe)),
-#              aes(x = date.time, y = GWL_m, colour = ele.probe)) +
-#   geom_point(size = 0.1) +
-#   ylab("Ground Water Level (masl)") + xlab("Date") +
-#   scale_color_discrete("Elevation_m (probe)") +
-#   ggtitle("Ground Water Levels at SERC ForestGEO plot") +
-#   theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-#   guides(colour = guide_legend(override.aes = list(size = 5))) +
-#   theme(legend.position = c(0.55, 0.6), legend.background = element_rect(fill="transparent")) +
-#   theme(axis.text.y = element_text(size = 12, face = "plain")) +
-#   scale_y_continuous(limits = c(-2, 10)) +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90, margin = margin(b = 2)))
-# p1.1 <- p1 + scale_x_datetime(date_breaks = "2 months", date_labels = "%d%b%y")
-# ggsave(file.path("figures/Ground Water Level by wells_single_panel.jpeg"), plot = p1.1, height = 4, width = 6, units='in')
-# ggsave(file.path("figures/Ground Water Level by wells_single_panel.pdf"), plot = p1.1, height = 4, width = 6, units='in')
-# p1.2 <- p1 + geom_point(aes(y = GWL_m_manual, fill = ele.probe), size = 3, shape = 24, alpha = 1, color = "black", show.legend = F)
-# ggsave(file.path("figures/Ground Water Level by wells_single_panel_with_OBS.jpeg"),  plot = p1.2, height = 5, width = 7.5, units='in')
-# p1.3 <- p1.2 +  scale_x_datetime(limits = c(max(watertable$date.time, na.rm = T) - 1*30*24*60*60, max(watertable$date.time, na.rm = T)),
-#                        date_breaks = "2 days", date_labels = "%d%b%y") +
-#   theme(legend.position = c(0.8, 0.6), legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Ground Water Level by wells_single_panel_with_OBS_last month.jpeg"),  plot = p1.3, height = 5, width = 7.5, units='in')
-# p1.4 <- p1.2 +  scale_x_datetime(limits = c(as.POSIXct("2020-03-02"), as.POSIXct("2020-03-02") + 3*24*60*60),
-#                                  date_breaks = "1 day", date_labels = "%d%b%y") +
-#   theme(legend.position = "top", legend.background = element_rect(fill="transparent"))
-# ggsave(file.path("figures/Ground Water Level by wells_single_panel_with_OBS_measurements.jpeg"),  plot = p1.4, height = 5, width = 7.5, units='in')
 
 # div.man <- watertable %>% subset(date.time > as.POSIXct("01-03-2020") & !is.na(GWL_m_manual)) %>%
 #   select(date.time, ele.probe, depth, water_depth_manual_cm, GWL_m, GWL_m_manual, `Pipe Height From Ground_cm`)
@@ -456,41 +367,6 @@ p0 + scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
 #           row.names = FALSE)
 # usethis::use_data(watertable_daily, overwrite = TRUE)
 
-
-# p4 <- ggplot(subset(watertable_daily, !is.na(ele.probe)),
-#              aes(x = date, y = depth, colour = ele.probe)) +
-#   geom_point(size = 0.5) +
-#   # geom_point(aes(x = date.time, y = water_depth_manual_cm), size = 3, pch = 8) +
-#   ylab("Water Depth (cm)") + xlab("MonthDay, 2018") +
-#   scale_y_continuous(limits = c(-400, 0)) +
-#   scale_color_discrete("Elevation_m (probe)") +
-#   theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-#   guides(colour = guide_legend(override.aes = list(size = 4))) +
-#   theme(legend.position = c(0.2,0.25), legend.background = element_rect(fill="transparent")) +
-#   theme(axis.text = element_text(size = 12, face = "plain", angle = 0)) +
-#   ggtitle("Water depth from soil surface at six locations at SERC ForestGEO plot")
-# p4 + scale_x_date(date_breaks = "1 week", date_labels = "%b%d", date_minor_breaks = "1 day") +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 90, margin = margin(b = 2)))
-# ###------------
-# p5 <- ggplot(subset(dat2, well == "baro"), aes(x = date.time, y = WaterPressure_cmH2O)) +
-#   geom_point(size = 0.1) +
-#   ylab("Atmospheric Pressure [cm H2O]") + xlab("Date") +
-#   scale_color_discrete("Elevation_m (probe)") +
-#   ggtitle("Atmospheric pressure time series") +
-#   theme(legend.position = c(0.3,0.3))
-# p5 + scale_x_datetime(date_breaks = "1 week", date_labels = "%b %d", date_minor_breaks = "1 day") +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 45)) #vjust = -0.1
-# ggsave(file.path("figures/Atpospheric pressure from Baro Diver.jpeg"), height = 6, width = 9, units='in')
-
-# p6 <- ggplot(subset(dat2, well == "baro"), aes(x = date.time, y = Temp_C)) +
-#   geom_point(size = 0.1) +
-#   ylab("Temperature [deg C]") + xlab("Date") +
-#   scale_color_discrete("Elevation_m (probe)") +
-#   ggtitle("Temperature time series") +
-#   theme(legend.position = c(0.85, 0.1))
-# p6 + scale_x_datetime(date_breaks = "1 week", date_labels = "%b %d", date_minor_breaks = "1 day") +
-#   theme(axis.text.x = element_text(size = 12, face = "plain", angle = 45)) #vjust = -0.1
-# ggsave(file.path("figures/Temperature from Baro Diver.jpeg"), height = 6, width = 9, units='in')
 
 
 
