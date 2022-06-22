@@ -24,7 +24,7 @@ Metadata for VanEssen TD Divers
 
 To do:
 ### Manually downloaded files dates and sampling rate:
-September 24, 2018 - December 31, 3018; measurement every 5 minutes
+September 24, 2018 - December 31, 2018; measurement every 5 minutes
 February 21, 2019; measurement every 5 minutes
 March 9, 2020 - December 29, 2020; measurement every 5 minutes until files downloaded April 22nd - increased to a measurement every hour
 January 19, 2021 - July 15, 2021; measurement every hour

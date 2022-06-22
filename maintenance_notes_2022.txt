@@ -1,0 +1,25 @@
+2022 diver maintenance log
+
+January 3, 2022
+- snow storm caused some coarse woody debris to hit well #6; diver is fine, automatic data collection failed
+- data collection prior to January was not consistent
+
+March 4, 2022
+- removed cable and diver from well #2 to use working cable to check data collection issue at well 4
+- diver #2 kept in lab until and diver #4 on slightly shorter cable until March 11th, 2022
+- changing cable did not help with data collection at well 4; is it the 4-pin connection on the SDI12 box causing the problem?
+
+March 11, 2022
+- returned diver #2 to the field and returned cables to correct position
+- well at diver #4 felt silted when lowering the diver; plan to pump the wells soon for this year
+- carefully cleaned the 4-prong connector on the SDI12 box with DI water and some ethanol
+- push and then turn the cable connector onto the SDI12 box and repeat that pattern until no threads are visible
+- diver #5 benefitted and data was being collected and diver #2 also started collecting data without issue
+- diver #4 did not collect
+- diver #1 is coming and going 
+
+March 30, 2022
+- cleaned cable at well 4 again
+- downloaded data at well 6 with optical cable
+- well 6 SDI12 box reconnected - wires had become loose; data from SDI12 now live; cable still not working
+- emailed Van Essen about issues and received a response that my message was forwarded
