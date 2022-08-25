@@ -22,11 +22,14 @@ Metadata for VanEssen TD Divers
 <<<<<<< HEAD
 
 
-To do:
 ### Manually downloaded files dates and sampling rate:
-September 24, 2018 - December 31, 2018; measurement every 5 minutes
-February 21, 2019; measurement every 5 minutes
-March 9, 2020 - December 29, 2020; measurement every 5 minutes until files downloaded April 22nd - increased to a measurement every hour
+
+September 24, 2018 - December 31, 2018: measurement every 5 minutes
+
+February 21, 2019: measurement every 5 minutes
+
+March 9, 2020 - December 29, 2020: measurement every 5 minutes until files downloaded April 22nd - increased to a measurement every hour
+
 January 19, 2021 - July 15, 2021; measurement every hour
 
 - import data from "~/Dropbox (Smithsonian)/watertable_package/watertable/data-raw/Diver-Office_exported data/CSV/uncompensated"
@@ -40,11 +43,13 @@ January 19, 2021 - July 15, 2021; measurement every hour
 - adjust dates/sampling rate to match between NEON and Diver data
 
 ### LoggerNet files dates and sampling rates:
-February 14th, 2019 - October 23rd, 2019; measurement every 15 minutes
-July 29, 2021 Diver 1 only; every 15 minutes
-August 6, 2021 all Divers connected; every 15 minutes
+February 14th, 2019 - October 23rd, 2019: measurement every 15 minutes
 
-- no need to import any files after October 23rd 2019 or during 2020, the Divers were not connected to LoggerNet and all values are NA or 0
+July 29, 2021 Diver 1 only: every 15 minutes
+
+August 6, 2021 all Divers connected: every 15 minutes
+
+- *no need to import any files from FGEO_Sensor_Data on Dropbox after October 23rd 2019 or during 2020, the Divers were not connected to LoggerNet and all values are NA or 0*
 
 - import data from:  "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir"
 

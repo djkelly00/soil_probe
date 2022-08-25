@@ -2,14 +2,17 @@
 ################# 2018 graphs ##########################
 #######################################################
 
+wt18 <- read.csv("C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2018_21_jun_2022.csv", header = TRUE)
 
-wt18 <- read.csv("C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/watertable_2018.csv", header = TRUE)
+wt18$date.time <- as.POSIXct(wt18$date.time, tz = "America/New_York", "%Y-%m-%d %H:%M:%S")
+wt18$date <- as.POSIXct(wt18$date, "%Y-%m-%d")
 
 
+library(ggplot2)
 ### Pressure observed by divers
-g0 <- ggplot(wt18, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.probe)) +
+g0 <- ggplot(wt18, aes(x = date.time, y = WaterPressure_cmH2O, colour = well)) +
   geom_point(show.legend = F, size = 0.5) +
-  facet_grid(ele.probe ~., scales = "free_y") +
+  facet_grid(well ~., scales = "free_y") +
   ylab("Pressure (cmH2O)") + xlab("Date") +
   scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
   theme(axis.text.x = element_text(size = 10, face = "plain", angle = 90)) +
@@ -17,20 +20,21 @@ g0 <- ggplot(wt18, aes(x = date.time, y = WaterPressure_cmH2O, colour = ele.prob
 ggsave(file.path("C:/Users/jessh/Documents/GitHub/soil_probe/figures/2018_Pressure_observed_by_Divers.jpeg"), plot = g0, height = 7, width = 12, units='in')
 
 
-ggplot(wt18, aes(x = date, y = GWL_m.filled)) +
+ggplot(wt18, aes(x = date, y = GWL_m)) +
   geom_point(aes(group = well, color = well)) +
   scale_x_datetime(date_breaks = "1 month", date_labels = "%d%b%y") +
   theme(axis.text.x = element_text(size = 10, face = "plain", angle = 90))
 
+#######################################################
+################# Not yet working #####################
 ## plotting watertable
-p1 <- ggplot(subset(wt18, !is.na(ele.probe)),
-             aes(x = date.time, y = GWL_m, colour = ele.probe)) +
+p1 <- ggplot(aes(x = date.time, y = GWL_m, colour = well)) +
   geom_point(size = 0.1) +
   ylab("Ground Water Level (masl)") + xlab("Date") +
-  scale_color_discrete("Elevation_m (probe)") +
+  scale_color_discrete("Well") +
   ggtitle("Ground Water Levels at SERC ForestGEO plot") +
   theme(panel.border = element_rect(colour = "black", fill = NA, size = 1)) +
-  guides(colour = guide_legend(override.aes = list(size = 5))) +
+  guides(colour = guide_legend(override.aes = list(size = 6))) +
   theme(legend.position = c(0.55, 0.6), legend.background = element_rect(fill="transparent")) +
   theme(axis.text.y = element_text(size = 12, face = "plain")) +
   scale_y_continuous(limits = c(-2, 10)) +

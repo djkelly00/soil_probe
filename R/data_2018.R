@@ -279,7 +279,7 @@ data2018$depth[data2018$well == "5f" & data2018$date.time %in% period3.5] <- NA
 data2018$GWL_m <- data2018$elevation_meters - data2018$depth/100
 
 data2018final <- data2018[ , c(1, 4, 2, 3, 9, 10, 17, 12, 13, 5, 14)]
-write.csv(data2018final, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2018_21_jun_2022.csv")
+write.csv(data2018final, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2018_21_jun_2022.csv", row.names = FALSE)
 
 ####### metadata
 metadata <- ele[ , c(2, 4:8, 12:14, 16:21)]
