@@ -38,7 +38,7 @@ man.dat20 <- rbind(man.dat20, d4)
 
 #####################################################################################
 ### visualize atm pressure and water pressure at each well to check missing data ###
-##########3##########################################################################
+#####################################################################################
 
 ## subset data by diver
 d1 <- subset(man.dat20.2, well == "1e")
@@ -130,8 +130,12 @@ best2020.prs <- best2020.sequential[!is.na(best2020.sequential$AtmPressure_cmH2O
 
 
 # recalculate water head = water pressure cm H2O - baro pressure cm H2O
-# did Rutuja remove (-) water head values?
+# remove values > 600 and < 0 per Rutuja's vetting - sometimes diver pressure winks in and out and erroneous values are imported
 best2020.prs$water_head_cm <- best2020.prs$WaterPressure_cmH2O - best2020.prs$AtmPressure_cmH2O
+
+best2020.prs <- best2020.prs %>% mutate(water_head_cm = ifelse(water_head_cm > 600 |
+                                                 water_head_cm < 0, NA, water_head_cm))
+
 
 #########################################################################
 ##### data to add atmospheric pressure - as of 2020-09-01 02:00:00 (hourly)
@@ -142,27 +146,36 @@ colnames(NEON.bp) <- c("date.time", "AtmPressure_cmH2O")
 NEON.bp$date.time <- as.POSIXct(NEON.bp$date.time, tz = "America/New_York", "%Y-%m-%d %H:%M:%S")
 
 best2020.add.prs <- merge(best2020.wo.prs, NEON.bp, by = "date.time", all.x = TRUE)
-best2020.add.prs <- best2020.add.prs[ , -c(6,7,9,10)]
-colnames(best2020.add.prs)[7] <- "AtmPressure_cmH2O"
+best2020.add.prs <- best2020.add.prs[ , -c(9,10)]
+colnames(best2020.add.prs)[9] <- "AtmPressure_cmH2O"
 
 best2020.add.prs$water_head_cm <- best2020.add.prs$WaterPressure_cmH2O - best2020.add.prs$AtmPressure_cmH2O
 
-### merge the added pressure data with the rest of the data
+best2020.add.prs <- best2020.add.prs %>% mutate(water_head_cm = ifelse(water_head_cm > 600 |
+                                                                 water_head_cm < 0, NA, water_head_cm))
+
+##############################################################
+### combine the added pressure data with the rest of the data ##
+dat2020 <- rbind(best2020.prs, best2020.add.prs)
+
+## add cable length 2020 in again...
+dat2020.1 <- left_join(dat2020, select(ele, well, A.Cable_Length_cm_2020), by = "well")
 
 ### add probe.depth, GWL_m, and depth
-datfil.2 <- left_join(dat.filtered %>% subset(date.time >= lubridate::force_tz(as.POSIXct("2019-02-14 00:00"), tz = "America/New_York")), select(ele, well, A.Cable_Length_cm_2020), by = "well")
+dat2020.1$probe.depth <- dat2020.1$A.Cable_Length_cm_2020 - dat2020.1$"Pipe Height From Ground_cm" + 11
 
-probe.depth <- $A.Cable_Length_cm_2020 - $Pipe Height From Ground_cm + 11
+dat2020.1$depth <- dat2020.1$probe.depth - dat2020.1$water_head_cm
 
-depth <- probe.depth - water_head_cm
-
-GWL_m <- elevation_meters - depth/100
+dat2020.1$GWL_m <- dat2020.1$elevation_meters - dat2020.1$depth/100
 
 
+### re-order to match 2018 and 2019, write.csv
+dat2020.2 <- dat2020.1[ , c(1,4,2,3,9,10,14, 12, 13, 5)]
 
-[ , c(1,4,2,3,9,10,GWL, probe depth, depth, 5, date)]
+### add date column
+dat2020.2$date <- as.Date(dat2020.2$date.time)
 
-
+write.csv(dat2020.2, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2020_25_aug_2022.csv", row.names = FALSE)
 
 
 

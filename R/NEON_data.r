@@ -75,3 +75,24 @@ bp.NEON.hour <- bp.min.2020 %>%
   group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
 
 write.csv(bp.NEON.hour, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2020.csv", row.names = FALSE)
+
+########################################
+##### export 2021 and 2022 data #######
+######################################
+
+### 2021
+bp.hour.2021 <- subset(bp.min.tower, bp.min.tower$date.time >= "2021-01-01" & bp.min.tower$date.time < "2022-01-01 00:00:00")
+
+bp.hour.2021 <- bp.hour.2021 %>%
+  group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
+
+write.csv(bp.hour.2021, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2021.csv", row.names = FALSE)
+
+
+### 2022
+bp.hour.2022 <- subset(bp.min.tower, bp.min.tower$date.time >= "2022-01-01" & bp.min.tower$date.time < "2023-01-01 00:00:00")
+
+bp.hour.2022 <- bp.hour.2022 %>%
+  group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
+
+write.csv(bp.hour.2022, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2022.csv", row.names = FALSE)
