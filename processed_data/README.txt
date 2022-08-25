@@ -15,4 +15,7 @@ NEW FILES 2022:
 data2018 - removed some rows of erroneous/missing data
 data2019 - combined manual data from early 2019 with data from the automated network
 data2020 - had to re-download some manual files as diver 3a and 6b were missing data
-         - recovered some January data from the automatically downloaded data for diver 4c
+         - recovered some January data from the automatically downloaded data for diver 4c and adjusted timestamp
+data2021 - used manually downloaded data; had to adjust 4c's timestamp again - recorded hourly
+         - automated data didn't begin until August for most divers and there was some spotty/breaks in data - recorded every 15 minutes
+    
