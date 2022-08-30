@@ -1,5 +1,5 @@
 ---
-title: "psuedo_code"
+title: "Diver Metadata"
 author: "JS"
 date: "8/16/2021"
 output: html_document
@@ -48,6 +48,8 @@ February 14th, 2019 - October 23rd, 2019: measurement every 15 minutes
 July 29, 2021 Diver 1 only: every 15 minutes
 
 August 6, 2021 all Divers connected: every 15 minutes
+
+*File updates/starts over for the week on Tuesday mornings around 4:15 am*
 
 - *no need to import any files from FGEO_Sensor_Data on Dropbox after October 23rd 2019 or during 2020, the Divers were not connected to LoggerNet and all values are NA or 0*
 

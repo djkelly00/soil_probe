@@ -2,7 +2,7 @@ install.packages("neonUtilities")
 install.packages("BiocManager")
 BiocManager::install('rhdf5')
 library(neonUtilities)
-
+library(tidyverse)
 options(stringsAsFactors=F)
 
 ### Precipitation
@@ -26,7 +26,88 @@ atmprs <- stackByTable(filepath="C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-
                        nCores=parallel::detectCores())
 
 
-##### for 2020, need 5 minute data January - April 6th
+#########################################################################
+#################### Precipitation #####################################
+#######################################################################
+minutes <- "1min" # minute data
+precip <-
+  read.csv(
+    file.path(paste("C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS/filesToStack00006/stackedFiles/SECPRE_", minutes, ".csv", sep = "")),
+    na.strings = c("NA", ""),
+    header = T,
+    row.names = NULL,
+    check.names = F
+  )
+
+
+### throughfall from the ground
+precipTH <-
+  read.csv(
+    file.path(paste("C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS/filesToStack00006/stackedFiles/THRPRE_", minutes, ".csv", sep = "")),
+    na.strings = c("NA", ""),
+    header = T,
+    row.names = NULL,
+    check.names = F
+  )
+
+
+
+## For precip,  verticalPosition is only 60 (top)
+unique(precip$horizontalPosition); unique(precip$verticalPosition)
+# 0, 60
+precip.min.tower <- precip %>% select(startDateTime, secPrecipBulk) %>%
+  mutate(date = as.Date(startDateTime, format = "%Y-%m-%dT%H:%M:%SZ")) %>%
+  mutate(date.time = as.POSIXct(startDateTime, format = "%Y-%m-%dT%H:%M:%SZ")) %>%
+  mutate(Precip.tower = secPrecipBulk, na.rm = T) %>%
+  select(date.time, date, Precip.tower)
+
+precip.tower <- precip.min.tower %>%
+  group_by(date) %>% summarise(Precip.tower = sum(Precip.tower, na.rm = T))
+
+### throughfall
+precip.min.TH <- precipTH %>% select(startDateTime, TFPrecipBulk) %>%
+  mutate(date = as.Date(startDateTime, format = "%Y-%m-%dT%H:%M:%SZ")) %>%
+  mutate(date.time = as.POSIXct(startDateTime, format = "%Y-%m-%dT%H:%M:%SZ")) %>%
+  group_by(date.time, date) %>% summarise(throughfall = mean(TFPrecipBulk, na.rm = T)) %>%
+  select(date.time, date, throughfall)
+
+precip.TH <- thf.min %>%
+  group_by(date) %>% summarise(throughfall = sum(throughfall, na.rm = T))
+
+### 2018 ###
+precip.daily.2018 <- subset(precip.tower, precip.tower$date >= "2018-01-01" & precip.tower$date < "2019-01-01")
+
+write.csv(precip.daily.2018, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/NEON_daily_precip_2018.csv", row.names = FALSE)
+
+
+### 2019 ###
+precip.daily.2019 <- subset(precip.tower, precip.tower$date >= "2019-01-01" & precip.tower$date < "2020-01-01")
+
+write.csv(precip.daily.2019, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/2019/NEON_daily_precip_2019.csv", row.names = FALSE)
+
+### 2020 ###
+precip.daily.2020 <- subset(precip.tower, precip.tower$date >= "2020-01-01" & precip.tower$date < "2021-01-01")
+
+write.csv(precip.daily.2020, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/2020/NEON_daily_precip_2020.csv", row.names = FALSE)
+
+TF.daily.2020 <- subset(precip.TH, precip.TH$date >= "2020-01-01" & precip.TH$date < "2021-01-01")
+
+write.csv(TF.daily.2020, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/2020/NEON_daily_throughfall_2020.csv", row.names = FALSE)
+
+### 2021 ###
+precip.daily.2021 <- subset(precip.tower, precip.tower$date >= "2021-01-01" & precip.tower$date < "2022-01-01")
+
+write.csv(precip.daily.2021, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/2021/NEON_daily_precip_2021.csv", row.names = FALSE)
+
+
+### 2022 ###
+precip.daily.2022 <- subset(precip.tower, precip.tower$date >= "2022-01-01" & precip.tower$date < "2023-01-01 00:00:00")
+
+write.csv(precip.daily.2022, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_balance/2022/NEON_daily_precip.csv", row.names = FALSE)
+##########################################################################
+################### Barometric Pressure #################################
+##### for 2020, need 5 minute data January - April 6th #################
+########################################################################
 minutes <- "1min" # minute data
 bp.big <-
   read.csv(
