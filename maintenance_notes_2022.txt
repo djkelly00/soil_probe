@@ -23,3 +23,14 @@ March 30, 2022
 - downloaded data at well 6 with optical cable
 - well 6 SDI12 box reconnected - wires had become loose; data from SDI12 now live; cable still not working
 - emailed Van Essen about issues and received a response that my message was forwarded
+
+June 14, 2022
+- troubleshooting with VanEssen and replacement SDI12 and cables
+- Firmware update was needed - Surface tablet wasn't connecting to the internet and a new version of software on my laptop showed the update was needed
+- Swapped SDI12's at diver 4 and 5, but that didn't solve the issue.
+- Swapped new cables at diver 4 and 5, data now collecting OK
+
+August 2022
+- Diver 2 now infrequently sending data automatically. Have attempted to re-attach cable several times without luck
+- Roy Rich and techncian - Rae Tennent dropped off a re-worked cable - will replace at Diver 2 and see if that helps
+- swapped cable on August 30th, now working!
