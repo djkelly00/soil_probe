@@ -18,4 +18,7 @@ data2020 - had to re-download some manual files as diver 3a and 6b were missing 
          - recovered some January data from the automatically downloaded data for diver 4c and adjusted timestamp
 data2021 - used manually downloaded data; had to adjust 4c's timestamp again - recorded hourly
          - automated data didn't begin until August for most divers and there was some spotty/breaks in data - recorded every 15 minutes
+data2022 - used manually downloaded data - hourly; 4c still needs adjusted to hourly
+         - automated data had some hiccups with divers going in and out; cables were replaced and will continue to be replaced as Roy Rich has developed a better
+         connection we can use as the original cable connections fail
     
