@@ -103,3 +103,44 @@ plot(dm3$date.time, dm3$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "man
 plot(dm4$date.time, dm4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 4c") # low reading in late April
 plot(dm5$date.time, dm5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 5f") # gap in June?
 plot(dm6$date.time, dm6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 6b") 
+
+
+###############################################################################
+########## Add hourly barometric pressure ####################################
+##############################################################################
+#########################################################################
+
+NEON.bp22 <- read.csv("C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2022.csv", header = TRUE)
+colnames(NEON.bp22) <- c("date.time", "AtmPressure_cmH2O")
+NEON.bp22$date.time <- as.POSIXct(NEON.bp22$date.time, tz = "America/New_York", "%Y-%m-%d %H:%M:%S")
+
+man.dat22.2 <- merge(man.dat22.1, NEON.bp22, by = "date.time", all.x = TRUE)
+
+
+man.dat22.2$water_head_cm <- man.dat22.2$WaterPressure_cmH2O - man.dat22.2$AtmPressure_cmH2O
+
+man.dat22.3 <- man.dat22.2 %>% mutate(water_head_cm = ifelse(water_head_cm > 600 |
+                                                               water_head_cm < 0, NA, water_head_cm))
+
+
+## add cable length 2020 in again...
+dat2022 <- left_join(man.dat22.3, select(ele, well, A.Cable_Length_cm_2020), by = "well")
+
+### add probe.depth, GWL_m, and depth
+dat2022$probe.depth <- dat2022$A.Cable_Length_cm_2020 - dat2022$"Pipe Height From Ground_cm" + 11
+
+dat2022$depth <- dat2022$probe.depth - dat2022$water_head_cm
+
+dat2022$GWL_m <- dat2022$elevation_meters - dat2022$depth/100
+
+
+### re-order to match 2018 and 2019, write.csv
+dat2022.1 <- dat2022[ , c(1,4,2,3,9,10,14, 12, 13, 5)]
+
+### add date column
+dat2022.1$date <- as.Date(dat2022.1$date.time)
+
+write.csv(dat2022.1, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2022_28_sep_2022.csv", row.names = FALSE)
+
+
+
