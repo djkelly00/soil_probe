@@ -2,7 +2,7 @@
 
 # Manual: data recorded hourly; well 4c off by 1 hour
 ### diver 4c recording 3 minutes early for the hourly measurement - round to next hour
-### not all divers have been downloaded manually this year as of August 30th - auto data has been running
+### all divers have been downloaded manually this year as of Sept. 21st, but need to make sure earlier measurements are included - auto data has been running with hiccups
 
 # Automatic: data every 15 minutes, some patchiness based on individual diver
 
@@ -16,7 +16,7 @@
 
 
 ################################################################################################
-### compiled automated data from auto_network_data.R - read in from autmated data file #########
+### compiled automated data from auto_network_data.R - read in from automated data file #########
 
 autdat22 <- subset(datfil.3, datfil.3$date.time >= "2022-01-01" & datfil.3$date.time < "2023-01-01")
 #write.csv(datfil.3, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/automated_data_30_aug_2022.csv", row.names = FALSE)
@@ -91,7 +91,7 @@ man.dat22.1 <- rbind(man.dat22, md4)
 ## subset data by diver
 dm1 <- subset(man.dat22.1, well == "1e")
 dm2 <- subset(man.dat22.1, well == "2d")
-#dm3 <- subset(man.dat22, well == "3a") ### not downloaded
+dm3 <- subset(man.dat22.1, well == "3a")
 dm4 <- subset(man.dat22.1, well == "4c")
 dm5 <- subset(man.dat22.1, well == "5f")
 dm6 <- subset(man.dat22.1, well == "6b")
@@ -100,6 +100,6 @@ dm6 <- subset(man.dat22.1, well == "6b")
 plot(dm1$date.time, dm1$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 1e") # only Jan-Feb
 plot(dm2$date.time, dm2$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 2d")
 plot(dm3$date.time, dm3$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 3a") # not downloaded
-plot(dm4$date.time, dm4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 4c") # ends June
-plot(dm5$date.time, dm5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 5f") # ends June
-plot(dm6$date.time, dm6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 6b") # ends June
+plot(dm4$date.time, dm4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 4c") # low reading in late April
+plot(dm5$date.time, dm5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 5f") # gap in June?
+plot(dm6$date.time, dm6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 6b") 

@@ -9,6 +9,7 @@ diver <- read.table("~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Current_data/FGEO-
 ### remove original rows 2 and 3; after skipping line 1 now they are rows 1 and 2
 diver <- diver[-c(1,2), ]
 
+
 ##### read in one of the raw data files just to see what they look like
 diver1 <- read.table("~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data/raw_dir/FGEO-1_DIVER_20211123034402.dat", header = TRUE, skip = 1, sep = ",")
 
