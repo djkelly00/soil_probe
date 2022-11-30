@@ -11,3 +11,8 @@ Water Balance - following Jess Parker's spreadsheet
 Barometric Pressure
 
 Hourly data from NEON for 2020, 2021, and 2022 to match with manually downloaded data
+
+**To Update JS**
+Starting from NEON project; trouble updating the data per Rutuja's code. Created NEON_data.R using some of her code to extract precipitation and barometric pressure data from NEON.
+
+Update current year file (2022) using code and saving the barometric pressure data directly to soil_probe on GitHub. The precipitation data is saved to Dropbox/SERC_water_balance/**year** folder. Then, add the new precipitation data to the running water balance file for the year in the soil_probe/MET_data folder.

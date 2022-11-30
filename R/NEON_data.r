@@ -8,14 +8,14 @@ options(stringsAsFactors=F)
 ### Precipitation
 zipsByProduct(dpID="DP1.00006.001", package="basic",
               site="SERC",
-              startdate="2018-01-01", enddate="2022-08-23",
+              startdate="2018-01-01", enddate="2022-11-30",
               savepath="C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS",
               check.size=F)
 
 ### BP
 zipsByProduct(dpID="DP1.00004.001", package="basic",
               site="SERC",
-              startdate="2018-01-01", enddate="2022-08-23",
+              startdate="2018-01-01", enddate="2022-11-30",
               savepath="C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS",
               check.size=F)
 
@@ -171,7 +171,7 @@ write.csv(bp.hour.2021, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEO
 
 
 ### 2022
-bp.hour.2022 <- subset(bp.min.tower, bp.min.tower$date.time >= "2022-01-01" & bp.min.tower$date.time < "2023-01-01 00:00:00")
+bp.hour.2022 <- subset(bp.min.tower, bp.min.tower$date.time >= "2021-01-01" & bp.min.tower$date.time < "2023-01-01 00:00:00")
 
 bp.hour.2022 <- bp.hour.2022 %>%
   group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
