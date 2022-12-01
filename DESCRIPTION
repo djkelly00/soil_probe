@@ -1,0 +1,28 @@
+Package: soil_probe
+Title: Smithsonian Environmental Research Center (SERC) ForestGEO plot diver data
+Description: This is the private data portal for the SERC ForestGEO plot diver data water table raw data.
+License: MIT + file LICENSE
+Version: 0.1.0
+Authors@R: c(
+    person(given = "Jessica", family = "Shue", role = "aut", email = "shuej@si.edu"),
+    person(given = "Sean", family = "McMahon", role = "aut", email = "mcmahons@si.edu"),
+    person(given = "Dominique", family = "Kelly", role = "aut")
+    )
+
+Depends: R (>= 4.0.0)
+Imports: 
+    testthat,
+    here,
+    readxl,
+    rgdal,
+    dplyr,
+    readr,
+    stringr,
+    janitor,
+    lubridate,
+    patchwork,
+    tidyr,
+    ggplot2
+URL: https://github.com/jess-shue/soil_probe
+BugReports: https://github.com/jess-shue/soil_probe/issues
+Config/testthat/edition: 3
