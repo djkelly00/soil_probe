@@ -24,6 +24,23 @@ March 30, 2022
 - well 6 SDI12 box reconnected - wires had become loose; data from SDI12 now live; cable still not working
 - emailed Van Essen about issues and received a response that my message was forwarded
 
+May 17, 2022
+- Firmware updated on diver 2, 4, 5, and 6
+- Swapped new cable and SDI12 box from VanEssen at diver 5 after firmware update
+- downloaded data at these wells before firmware update
+
+May 20, 2022
+- Diver 5 still not working; will swap old box and cable back in
+- All other divers now sending data via network
+
+May 25, 2022
+- Swapped old SDI12 box for new box at Diver 5
+- Downloaded data and updated firmware at Diver 3 and Diver 1
+
+June 8, 2022,
+- Swapped cable at well 4 with replacement from VanEssen
+- Checked well 3; orange cable was loose - tightened and added more zip-ties to hold the SDI12 box in place
+
 June 14, 2022
 - troubleshooting with VanEssen and replacement SDI12 and cables
 - Firmware update was needed - Surface tablet wasn't connecting to the internet and a new version of software on my laptop showed the update was needed
@@ -31,6 +48,26 @@ June 14, 2022
 - Swapped new cables at diver 4 and 5, data now collecting OK
 
 August 2022
+August 30, 2022
+- Replaced cable at well 2 and 4 with a rebuilt 4-pin connector made by Roy
 - Diver 2 now infrequently sending data automatically. Have attempted to re-attach cable several times without luck
-- Roy Rich and techncian - Rae Tennent dropped off a re-worked cable - will replace at Diver 2 and see if that helps
+- Roy Rich and techncian - Rae Tennent dropped off a re-worked cable - will replace at Diver 2 and 4 and see if that helps
 - swapped cable on August 30th, now working!
+
+November 14, 2022
+- Battery issue - appears power outtage may have tripped the power at the box. Attempted to reset without luck and sent SI Communications email for assistance
+- Divers 3, 4, and 6 not sending data through the autmated network; all there had some evidence of water
+- Downloaded data at all wells except 4; was unable to connect via the cable - water damage too great?
+- Morning of November 15th all divers down except 1 and 2
+
+November 16, 2022
+- Battery level dropped below 8.7 and data no longer coming through Logger Net
+
+November 17, 2022
+- Replaced battery tender to battery
+- Replaced cables at well 3, 4, 5, and 6 with rebuilt M8 connector cables
+
+November 18, 2022
+- Battery voltage up to 12.1 by 10 am using multimeter from Roy's lab
+- Battery voltage up to 12.15 by 2:45 pm using same multimeter
+- Data still not coming through Logger Net
