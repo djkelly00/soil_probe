@@ -111,7 +111,7 @@ write.csv(precip.daily.2022, "C:/Users/jessh/Dropbox (Smithsonian)/SERC_water_ba
 minutes <- "1min" # minute data
 bp.big <-
   read.csv(
-    file.path(paste("C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS/filesToStack00004/stackedFiles/BP_", minutes, ".csv", sep = "")),
+    file.path(paste("C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/2022/filesToStack00004/stackedFiles/BP_", minutes, ".csv", sep = "")),
     na.strings = c("NA", ""),
     header = T,
     row.names = NULL,
@@ -152,10 +152,15 @@ bp.min.tower$hour <- cut(bp.min.tower$date.time, breaks = "60 min")
 
 bp.min.2020 <- subset(bp.min.tower, bp.min.tower$date.time >= "2020-01-01 00:00:00" & bp.min.tower$date.time < "2021-01-01 00:00:00")
 
+bp.min.2022 <- subset(bp.min.tower, bp.min.tower$date.time >= "2022-01-01 00:00:00" & bp.min.tower$date.time < "2023-01-01 00:00:00")
+
 bp.NEON.hour <- bp.min.2020 %>%
   group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
 
-write.csv(bp.NEON.hour, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2020.csv", row.names = FALSE)
+bp.NEON.hour <- bp.min.2022 %>%
+  group_by(hour) %>% summarise(AtmPressure_cmH2O = mean(corPres.cmH2O, na.rm = T))
+
+write.csv(bp.NEON.hour, "C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2022.csv", row.names = FALSE)
 
 ########################################
 ##### export 2021 and 2022 data #######

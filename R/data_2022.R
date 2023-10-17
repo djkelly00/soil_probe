@@ -24,8 +24,16 @@ autdat22 <- subset(datfil.3, datfil.3$date.time >= "2022-01-01" & datfil.3$date.
 ## mean of water pressure to create daily data - mean of atm pressure as well or add in from NEON?
 autdat22$time.interval <- cut(autdat22$date.time, breaks = "1 hour")
 
-autdat22.1 <- autdat22 %>%
-  group_by(well, time.interval) %>% summarise_at(vars("WaterPressure_cmH2O", "Temp_C", "AtmPressure_cmH2O", "temp.SDI12", na.rm = all_of(T)), mean)
+# summarise_at deprecated - look into across() and vignette("colwise")
+autdat22.1 <- 
+  autdat22 %>%
+  group_by(well, time.interval) %>% 
+  summarise_at(vars("WaterPressure_cmH2O", 
+                    "Temp_C", 
+                    "AtmPressure_cmH2O", 
+                    "temp.SDI12", 
+                    na.rm = all_of(T)), 
+               mean)
 
 #####################################################################################
 ### visualize atm pressure and water pressure at each well to check missing data ###
@@ -46,11 +54,19 @@ plot(d1$date.time, d1$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "1e") 
 rownames(d1) <- NULL
 d1 <- d1[-c(8174, 5347), ] # strange readings - one in May and one in June removed
 
-plot(d2$date.time, d2$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "2d") # missing August
+plot(d2$date.time, d2$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "2d") 
+# missing August
+
 plot(d3$date.time, d3$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "3a")
-plot(d4$date.time, d4$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "4c") # missing Mar-May
-plot(d5$date.time, d5$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "5f") # missing Jan, some of April
-plot(d6$date.time, d6$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "6b") # issues earlier in the year
+
+plot(d4$date.time, d4$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "4c")
+# missing Mar-May; Dec
+
+plot(d5$date.time, d5$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "5f") 
+# missing Jan-Feb, some of April
+
+plot(d6$date.time, d6$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "6b") 
+# issues earlier in the year
 
 
 ## plot water pressure - check for outliers and missing data
@@ -61,7 +77,7 @@ plot(d6$date.time, d6$AtmPressure_cmH2O, pch = 19, col = 'purple', main = "6b") 
 plot(d1$date.time, d1$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "1e") # missing Feb
 plot(d2$date.time, d2$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "2d") # some gaps, Aug
 plot(d3$date.time, d3$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "3a")
-plot(d4$date.time, d4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "4c") # gaps April, May, June
+plot(d4$date.time, d4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "4c") # gaps April, May, June, Dec
 plot(d5$date.time, d5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "5f") # gaps April - June
 plot(d6$date.time, d6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "6b") # missing prior to June
 
@@ -71,7 +87,7 @@ plot(d6$date.time, d6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "6b") 
 ###################################################################################
 
 man.dat22 <- subset(dat2, dat2$date.time >= "2022-01-01" & dat2$date.time < "2023-01-01")
-#write.csv(dat2, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/manual_data_30_aug_2022.csv", row.names = FALSE)
+# write.csv(dat2, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/manual_data_17_oct_2023.csv", row.names = FALSE)
 ###################################################################################
 ### diver 4 issue - times short of the hour mark - round to nearest hour
 ###############################################################################
@@ -83,7 +99,7 @@ md4$date.time <- format(round(md4$date.time, units="hours"), format="%Y-%m-%d %H
 #### remove original 4c data from manual dataset - 16297 rows originally
 man.dat22 <- subset(man.dat22, well != "4c") # 13024 rows
 
-#### add back to man.dat21 - added one row to include midnight on 2021-01-01 - 16298 rows
+#### add back to man.dat22 - added one row to include midnight on 2021-01-01 - 16298 rows
 man.dat22.1 <- rbind(man.dat22, md4)
 
 
@@ -97,11 +113,18 @@ dm5 <- subset(man.dat22.1, well == "5f")
 dm6 <- subset(man.dat22.1, well == "6b")
 
 
-plot(dm1$date.time, dm1$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 1e") # only Jan-Feb
+plot(dm1$date.time, dm1$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 1e")
+
 plot(dm2$date.time, dm2$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 2d")
-plot(dm3$date.time, dm3$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 3a") # not downloaded
-plot(dm4$date.time, dm4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 4c") # low reading in late April
-plot(dm5$date.time, dm5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 5f") # gap in June?
+
+plot(dm3$date.time, dm3$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 3a") 
+
+# One outlier in late April/May
+
+plot(dm4$date.time, dm4$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 4c") 
+
+plot(dm5$date.time, dm5$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 5f")
+
 plot(dm6$date.time, dm6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "manual 6b") 
 
 
@@ -111,7 +134,9 @@ plot(dm6$date.time, dm6$WaterPressure_cmH2O, pch = 19, col = 'blue', main = "man
 #########################################################################
 
 NEON.bp22 <- read.csv("C:/Users/jessh/Documents/GitHub/soil_probe/MET_data/NEON_hourly_bp_2022.csv", header = TRUE)
+
 colnames(NEON.bp22) <- c("date.time", "AtmPressure_cmH2O")
+
 NEON.bp22$date.time <- as.POSIXct(NEON.bp22$date.time, tz = "America/New_York", "%Y-%m-%d %H:%M:%S")
 
 man.dat22.2 <- merge(man.dat22.1, NEON.bp22, by = "date.time", all.x = TRUE)
@@ -140,7 +165,7 @@ dat2022.1 <- dat2022[ , c(1,4,2,3,9,10,14, 12, 13, 5)]
 ### add date column
 dat2022.1$date <- as.Date(dat2022.1$date.time)
 
-write.csv(dat2022.1, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2022_28_sep_2022.csv", row.names = FALSE)
+write.csv(dat2022.1, "C:/Users/jessh/Documents/GitHub/soil_probe/processed_data/data2022_17_oct_2023.csv", row.names = FALSE)
 
 
 

@@ -3,7 +3,14 @@
 #readLines("~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Current_data/FGEO-1_DIVER.dat")
 
 ### read in current data from Roy's FGEO folder to check Diver's are connected and data is coming in
-diver <- read.table("~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Current_data/FGEO-1_DIVER.dat", header = TRUE, skip = 1, sep = ",")
+read_dir <- "~/Dropbox (Smithsonian)/FGEO_Sensor_Data"
+
+diver <- 
+  read_dir %>% 
+  file.path("Current_data/FGEO-1_DIVER.dat") %>% 
+  read.table(header = TRUE, 
+             skip = 1, 
+             sep = ",")
 
  
 ### remove original rows 2 and 3; after skipping line 1 now they are rows 1 and 2
@@ -24,9 +31,18 @@ filelist <- list.files(path = "~/Dropbox (Smithsonian)/FGEO_Sensor_Data/Raw_data
 library(data.table)
 #### read the list of files and combine into one dataframe
 
-dataset <- do.call("rbind", lapply(filelist, FUN = function(file) {
-  read.table(file, header=TRUE, sep=",", skip = 1, na.strings = "99999")
-}))
+dataset <- 
+  # read.dir %>% 
+  # file.path("Raw_data/raw_dir") %>% 
+  do.call(
+    "rbind", 
+    lapply(filelist, 
+           FUN = function(file) {
+  read.table(file, 
+             header=TRUE, 
+             sep=",", 
+             skip = 1, 
+             na.strings = "99999")}))
 
 ### remove rows with 'TS' and blank in column TIMESTAMP - extra header rows not easy to remove in previous step
 dataset <- subset(dataset, TIMESTAMP != "TS")
