@@ -5,10 +5,10 @@ library(neonUtilities)
 library(tidyverse)
 options(stringsAsFactors=F)
 
-### Precipitation
+### Precipitation - Data collected in any given month are published during the second full week of the following month.
 zipsByProduct(dpID="DP1.00006.001", package="basic",
               site="SERC",
-              startdate="2018-01-01", enddate="2022-11-30",
+              startdate="2023-01-01", enddate="2023-07-14",
               savepath="C:/Users/jessh/Dropbox (Smithsonian)/NEON/data-raw/JS",
               check.size=F)
 
