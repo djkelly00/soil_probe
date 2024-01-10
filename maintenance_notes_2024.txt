@@ -1,0 +1,12 @@
+January 3, 2024
+- Downloaded data and reattached Diver 1 cable 
+	- Blue wire in SDI12 appeared to be loose/slipping, reattached
+	- SDI12 appeared to flash green appropriately
+- Replaced Diver 2 with new cable
+	- would not connect to Diver Office via cable
+	- repair to cable may not have worked
+- Checked wiring of Sentek and Diver at 3 and reattached Diver
+	- re-joined red/orange wires and white wires as they had rusted and broken
+	- water is getting into this box; may need to replace
+
+*After these initial steps, the Sentek probe data from 3A was coming through when it wasn't previously. Sentek probe 2D is still down, and I believe needs to be replaced. Divers 1, 2, and 3 still aren't reading into LoggerNet. The SDI12 boxes at 1 and 3 are sending temperature and pressure, but no readings from the Diver. Diver 2 isn't reading at all.

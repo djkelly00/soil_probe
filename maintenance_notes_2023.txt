@@ -1,0 +1,12 @@
+Sentek probe 2a not functioning; cannot find any issues with wiring - may need more troubleshooting or replacement
+
+Fall 2023 - issue along the Western line of divers and Sentek probes
+- walked cable line and could not find any breaks or issues
+- Diver/Sentek at location 1 and 3 working, but Sentek at location 2 still down
+
+December 2023
+- Diver at location 2 also down along with Diver and Sentek at 3, 1 was reporting data
+- Eventually, Diver 1 also down but Sentek OK
+
+January 2, 2024
+- Found cable of Diver two chewed, returned to lab to re-wire
